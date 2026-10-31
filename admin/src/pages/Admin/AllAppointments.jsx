@@ -115,11 +115,9 @@ const AllAppointments = () => {
                     </td>
                     {/* Action */}
                     <td className="px-5 py-4">
-                      {" "}
                       {item.cancelled ? (
                         <span className="inline-flex items-center rounded-full bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600">
-                          {" "}
-                          Cancelled{" "}
+                          Cancelled
                         </span>
                       ) : (
                         <button
@@ -128,16 +126,15 @@ const AllAppointments = () => {
                           className="inline-flex items-center justify-center gap-2 rounded-lg border border-red-200 bg-white px-3 py-2 text-xs font-semibold text-red-600 transition-all duration-200 hover:border-red-300 hover:bg-red-50 active:scale-95"
                           title="Cancel appointment"
                         >
-                          {" "}
                           <img
                             src={assets.cancel_icon}
                             alt=""
                             className="h-4 w-4"
-                          />{" "}
-                          Cancel{" "}
+                          />
+                          Cancel
                         </button>
-                      )}{" "}
-                    </td>{" "}
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>

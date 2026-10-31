@@ -3,6 +3,7 @@ import { AppContext } from "../context/AppContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { getFriendlyApiError } from "../utils/apiError";
 
 const Login = () => {
  const {backendUrl ,token,setToken} = useContext(AppContext)
@@ -48,9 +49,7 @@ const Login = () => {
       error.response?.data || error.message
     );
 
-    toast.error(
-      error.response?.data?.message || "Something went wrong"
-    );
+    toast.error(getFriendlyApiError(error, "Something went wrong. Please try again."));
   }
 };
 

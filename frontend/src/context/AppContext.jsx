@@ -1,7 +1,8 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { getDoctorImage } from "../utils/doctorImage";
+import { getDoctorEmail, getDoctorImage } from "../utils/doctorImage";
+import { getFriendlyApiError } from "../utils/apiError";
 
 export const AppContext = createContext();
 
@@ -24,6 +25,7 @@ const AppContextProvider = (props) => {
       if (data.success) {
         setDoctors(data.doctors.map((doctor) => ({
           ...doctor,
+          email: getDoctorEmail(doctor),
           image: getDoctorImage(doctor),
         })));
       } else {
@@ -31,7 +33,7 @@ const AppContextProvider = (props) => {
       }
     } catch (error) {
       console.error("GET DOCTORS ERROR:", error);
-      if (!silent) toast.error("Failed to fetch doctors");
+      if (!silent) toast.error(getFriendlyApiError(error, "Unable to load doctors. Please try again."));
     }
   };
   const loadUserProfileData = async () => {
@@ -46,7 +48,11 @@ const AppContextProvider = (props) => {
       }
     } catch (error) {
       console.error("GET DOCTORS ERROR:", error);
-      toast.error("Failed to fetch doctors");
+      if (error?.response?.status === 401) {
+        localStorage.removeItem("token");
+        setToken("");
+      }
+      toast.error(getFriendlyApiError(error, "Unable to load your profile. Please try again."));
     }
   };
 
@@ -71,7 +77,7 @@ const AppContextProvider = (props) => {
     } catch (error) {
       console.error("REGISTER ERROR:", error.response?.data || error.message);
 
-      toast.error(error.response?.data?.message || "Registration failed");
+      toast.error(getFriendlyApiError(error, "Registration failed. Please try again."));
       return false;
     }
   };
@@ -96,7 +102,7 @@ const AppContextProvider = (props) => {
     } catch (error) {
       console.error("LOGIN ERROR:", error.response?.data || error.message);
 
-      toast.error(error.response?.data?.message || "Login failed");
+      toast.error(getFriendlyApiError(error, "Login failed. Please check your details and try again."));
       return false;
     }
   };

@@ -1,0 +1,18 @@
+{
+  "watch": [
+    "server.js",
+    "config",
+    "controllers",
+    "middleware",
+    "models",
+    "routes",
+    "scripts"
+  ],
+  "ext": "js,json",
+  "ignore": [
+    "node_modules",
+    "uploads"
+  ],
+  "delay": "1000",
+  "restartable": "rs"
+}

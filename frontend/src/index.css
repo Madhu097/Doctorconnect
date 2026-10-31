@@ -19,6 +19,20 @@
   @apply hidden;
 }
 
+.appointment-slots-scroll {
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.appointment-slots-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.slot-scroll-button {
+  @apply absolute top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-xl leading-none text-gray-600 shadow-sm transition hover:border-primary hover:text-primary;
+}
+
 @media(max-width:740px){
   .active p{
     @apply text-white bg-primary}

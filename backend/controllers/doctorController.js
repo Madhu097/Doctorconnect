@@ -35,7 +35,7 @@ const doctorList = async (req, res) => {
     res.set("Expires", "0");
     const doctors = await doctorModel
       .find({})
-      .select(["-password", "-email"])
+      .select("-password")
       .sort({ date: 1 });
     res.json({ success: true, doctors });
   } catch (error) {

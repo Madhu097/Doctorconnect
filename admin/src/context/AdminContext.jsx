@@ -2,6 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { createContext, useEffect, useState } from "react";
 import { getDoctorImage } from "../../../frontend/src/utils/doctorImage";
+import { getFriendlyApiError } from "../utils/apiError";
 
 export const AdminContext = createContext();
 const AdminContextProvider = (props) => {
@@ -31,7 +32,7 @@ const AdminContextProvider = (props) => {
         toast.error(data.message);
       }
     } catch (error) {
-      if (!silent) toast.error(error.message);
+      if (!silent) toast.error(getFriendlyApiError(error, "Unable to load doctors. Please try again."));
     }
   };
 
@@ -66,16 +67,26 @@ const AdminContextProvider = (props) => {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || error.message);
+      toast.error(getFriendlyApiError(error, "Unable to update doctor availability. Please try again."));
     }
     return false;
   };
 
   const updateDoctor = async (doctorData) => {
     try {
+      const payload = {
+        docId: doctorData.docId || doctorData._id,
+        name: doctorData.name,
+        degree: doctorData.degree,
+        speciality: doctorData.speciality,
+        experience: doctorData.experience,
+        about: doctorData.about,
+        fees: doctorData.fees,
+        address: doctorData.address,
+      };
       const { data } = await axios.put(
         backendUrl + "/api/admin/update-doctor",
-        doctorData,
+        payload,
         { headers: { aToken } },
       );
       if (data.success) {
@@ -93,7 +104,7 @@ const AdminContextProvider = (props) => {
       }
       toast.error(data.message);
     } catch (error) {
-      toast.error(error.response?.data?.message || error.message);
+      toast.error(getFriendlyApiError(error, "Unable to update doctor details. Please try again."));
     }
     return false;
   };
@@ -111,7 +122,7 @@ const AdminContextProvider = (props) => {
       }
       toast.error(data.message);
     } catch (error) {
-      toast.error(error.response?.data?.message || error.message);
+      toast.error(getFriendlyApiError(error, "Unable to change the doctor password. Please try again."));
     }
     return false;
   };
@@ -133,7 +144,7 @@ const AdminContextProvider = (props) => {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(getFriendlyApiError(error, "Unable to load appointments. Please try again."));
     }
   };
 
@@ -151,7 +162,7 @@ const AdminContextProvider = (props) => {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(getFriendlyApiError(error, "Unable to cancel the appointment. Please try again."));
     }
   };
 
@@ -173,7 +184,7 @@ const AdminContextProvider = (props) => {
         toast.error(data.message)
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(getFriendlyApiError(error, "Unable to load dashboard data. Please try again."));
     }
   }
   const value = {

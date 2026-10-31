@@ -26,14 +26,33 @@ const seededDoctorImagesByName = {
   "rohit malhotra": "doc10",
 };
 
-export const getDoctorImage = (doctor) => {
-  const emailKey = doctor?.email?.trim().toLowerCase();
-  const nameKey = doctor?.name
+const seededDoctorEmailsByName = {
+  "rajesh kumar": "rajesh.kumar@doctorconnect.demo",
+  "priya sharma": "priya.sharma@doctorconnect.demo",
+  "amit verma": "amit.verma@doctorconnect.demo",
+  "vikram singh": "vikram.singh@doctorconnect.demo",
+  "neha kapoor": "neha.kapoor@doctorconnect.demo",
+  "sanjay patel": "sanjay.patel@doctorconnect.demo",
+  "arjun mehta": "arjun.mehta@doctorconnect.demo",
+  "pooja iyer": "pooja.iyer@doctorconnect.demo",
+  "kavita rao": "kavita.rao@doctorconnect.demo",
+  "rohit malhotra": "rohit.malhotra@doctorconnect.demo",
+};
+
+const getDoctorNameKey = (doctor) =>
+  doctor?.name
     ?.trim()
     .toLowerCase()
     .replace(/^dr\.?\s+/, "");
+
+export const getDoctorImage = (doctor) => {
+  const emailKey = doctor?.email?.trim().toLowerCase();
+  const nameKey = getDoctorNameKey(doctor);
   const imageKey =
     seededDoctorImages[emailKey] || seededDoctorImagesByName[nameKey];
 
   return doctorImages[imageKey] || doctor?.image;
 };
+
+export const getDoctorEmail = (doctor) =>
+  doctor?.email?.trim().toLowerCase() || seededDoctorEmailsByName[getDoctorNameKey(doctor)] || "";

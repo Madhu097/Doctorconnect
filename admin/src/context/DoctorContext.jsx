@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { createContext } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { getFriendlyApiError } from "../utils/apiError";
 
 export const DoctorContext = createContext();
 const DoctorContextProvider = (props) => {
@@ -34,7 +35,7 @@ const DoctorContextProvider = (props) => {
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      toast.error(getFriendlyApiError(error, "Unable to load appointments. Please try again."));
     }
   };
 
@@ -46,7 +47,7 @@ const DoctorContextProvider = (props) => {
       if (data.success) setDashData(data.dashData);
       else toast.error(data.message);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(getFriendlyApiError(error, "Unable to load your dashboard. Please try again."));
     }
   };
 
@@ -58,7 +59,7 @@ const DoctorContextProvider = (props) => {
       if (data.success) setDoctor(data.doctor);
       else toast.error(data.message);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(getFriendlyApiError(error, "Unable to load your profile. Please try again."));
     }
   };
 
@@ -80,7 +81,7 @@ const DoctorContextProvider = (props) => {
       }
       toast.error(data.message);
     } catch (error) {
-      toast.error(error.response?.data?.message || error.message);
+      toast.error(getFriendlyApiError(error, "Unable to update availability. Please try again."));
     }
     return false;
   };
@@ -96,7 +97,7 @@ const DoctorContextProvider = (props) => {
       } else toast.error(data.message);
       return data.success;
     } catch (error) {
-      toast.error(error.response?.data?.message || error.message);
+      toast.error(getFriendlyApiError(error, "Unable to update your profile. Please try again."));
       return false;
     }
   };
@@ -121,7 +122,7 @@ const DoctorContextProvider = (props) => {
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      toast.error(getFriendlyApiError(error, "Unable to complete the appointment. Please try again."));
     }
   };
 
@@ -145,7 +146,7 @@ const DoctorContextProvider = (props) => {
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      toast.error(getFriendlyApiError(error, "Unable to cancel the appointment. Please try again."));
     }
   };
 

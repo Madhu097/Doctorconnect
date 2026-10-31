@@ -12,7 +12,8 @@ const AddDoctor = () => {
   const [experience, setExperience] = useState("1 Year");
   const [fees, setFees] = useState("");
   const [about, setAbout] = useState("");
-  const [Speciality, setSpeciality] = useState("General Physician");
+  const [Speciality, setSpeciality] = useState("General physician");
+  const [customSpeciality, setCustomSpeciality] = useState("");
   const [degree, setDegree] = useState("");
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
@@ -40,7 +41,11 @@ const AddDoctor = () => {
       formData.append("experience", experience);
       formData.append("fees", Number(fees));
       formData.append("about", about);
-      formData.append("speciality", Speciality);
+      const selectedSpeciality = Speciality === "Other" ? customSpeciality.trim() : Speciality;
+      if (!selectedSpeciality) {
+        return toast.error("Please enter a speciality");
+      }
+      formData.append("speciality", selectedSpeciality);
       formData.append("degree", degree);
       formData.append(
         "address",
@@ -77,6 +82,8 @@ const AddDoctor = () => {
         setDegree("")
         setAbout("")
         setFees("")
+        setSpeciality("General physician")
+        setCustomSpeciality("")
       } else {
         toast.error(data.message || "Failed to add doctor");
         
@@ -237,13 +244,24 @@ const AddDoctor = () => {
                 value={Speciality}
                 className="w-full px-4 py-3 text-sm border border-slate-200 rounded-lg outline-none bg-white cursor-pointer transition-all hover:border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
               >
-                <option value="General Physician">General Physician</option>
-                <option value="Gyncologist">Gynecologist</option>
+                <option value="General physician">General physician</option>
+                <option value="Gynecologist">Gynecologist</option>
                 <option value="Dermatologist">Dermatologist</option>
-                <option value="Pediatricians">Pediatrician</option>
+                <option value="Pediatricians">Pediatricians</option>
                 <option value="Neurologist">Neurologist</option>
                 <option value="Gastroenterologist">Gastroenterologist</option>
+                <option value="Cardiologist">Cardiologist</option>
+                <option value="Other">Add speciality</option>
               </select>
+              {Speciality === "Other" && (
+                <input
+                  value={customSpeciality}
+                  onChange={(e) => setCustomSpeciality(e.target.value)}
+                  placeholder="Enter speciality"
+                  required
+                  className="w-full px-4 py-3 text-sm border border-slate-200 rounded-lg outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                />
+              )}
             </div>
 
             <div className="flex flex-col gap-2">

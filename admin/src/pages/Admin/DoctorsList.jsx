@@ -2,6 +2,16 @@ import React, { useContext, useState } from 'react'
 import { AdminContext } from '../../context/AdminContext'
 import { useEffect } from 'react'
 
+const specialityOptions = [
+  "General physician",
+  "Gynecologist",
+  "Dermatologist",
+  "Pediatricians",
+  "Neurologist",
+  "Gastroenterologist",
+  "Cardiologist",
+];
+
 const DoctorsList = () => {
   const {doctors,aToken,getAllDoctors, changeAvailability, updateDoctor, changeDoctorPassword} = useContext(AdminContext)
   const [passwords, setPasswords] = useState({})
@@ -86,7 +96,6 @@ const DoctorsList = () => {
                       {[
                         ["name", "Name"],
                         ["degree", "Degree"],
-                        ["speciality", "Speciality"],
                         ["experience", "Experience"],
                         ["fees", "Consultation fee"],
                       ].map(([field, label]) => (
@@ -101,6 +110,30 @@ const DoctorsList = () => {
                           />
                         </label>
                       ))}
+                      <label className="text-sm text-slate-600">
+                        Speciality
+                        <select
+                          required
+                          value={specialityOptions.includes(editingDoctor.speciality) ? editingDoctor.speciality : (editingDoctor.speciality ? "Other" : "")}
+                          onChange={(event) => setEditingDoctor((current) => ({ ...current, speciality: event.target.value === "Other" ? "" : event.target.value }))}
+                          className="mt-1 w-full rounded border bg-white px-3 py-2"
+                        >
+                          <option value="" disabled>Select speciality</option>
+                          {specialityOptions.map((speciality) => (
+                            <option key={speciality} value={speciality}>{speciality}</option>
+                          ))}
+                          <option value="Other">Add speciality</option>
+                        </select>
+                        {!specialityOptions.includes(editingDoctor.speciality) && (
+                          <input
+                            required
+                            value={editingDoctor.speciality || ""}
+                            placeholder="Enter speciality"
+                            onChange={(event) => setEditingDoctor((current) => ({ ...current, speciality: event.target.value }))}
+                            className="mt-2 w-full rounded border px-3 py-2"
+                          />
+                        )}
+                      </label>
                     </div>
                     <label className="mt-3 block text-sm text-slate-600">
                       About

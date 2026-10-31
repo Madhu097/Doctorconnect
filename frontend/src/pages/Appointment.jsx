@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import { assets } from "../assets/images/assets";
@@ -16,6 +16,11 @@ const Appointment = () => {
   const [docSlots, setDocSlots] = useState([]);
   const [slotIndex, setSlotIndex] = useState(0);
   const [slotTime, setSlotTime] = useState("");
+  const dateSlotsRef = useRef(null);
+  const timeSlotsRef = useRef(null);
+  const scrollSlots = (ref, direction) => {
+    ref.current?.scrollBy({ left: direction * 240, behavior: "smooth" });
+  };
   const fetchDocInfo = async () => {
     const docInfo = doctors.find((doc) => doc._id === docId);
     setDocInfo(docInfo);
@@ -149,6 +154,10 @@ const Appointment = () => {
                 {docInfo.experience}
               </button>
             </div>
+            <p className="mt-2 text-sm text-gray-600">
+              <span className="font-medium text-gray-900">Email:</span>{" "}
+              {docInfo.email || "Email not available"}
+            </p>
             {/*----doctors about----*/}
             <div>
               <p className="flex items-center gap-1 text-sm font-medium text-gray-900 mt-3">
@@ -167,32 +176,50 @@ const Appointment = () => {
           </div>
         </div>
         {/*----- booking slots-------*/}
-        <div className="sm:ml-72 sm:pl-4 mt-4 font-medium text-gray-700">
-          <p>Booking Slots</p>
-          <div className="flex gap-3 items-center w-full overflow-x-scroll mt-4">
-            {docSlots.length &&
-              docSlots.map((item, index) => (
-                <div
-                  onClick={() => setSlotIndex(index)}
-                  className={`text-center py-6 min-w-16 rounded-full cursor-pointer ${slotIndex === index ? "bg-primary text-white" : "border border-gray-200"}`}
-                  key={index}
-                >
-                  <p>{item[0] && daysOfWeek[item[0].datetime.getDay()]}</p>
-                  <p>{item[0] && item[0].datetime.getDate()}</p>
-                </div>
-              ))}
+        <div className="mt-6 font-medium text-gray-700 sm:ml-72 sm:pl-4">
+          <p className="mb-1">Booking Slots</p>
+          <div className="relative mt-4">
+            <button type="button" onClick={() => scrollSlots(dateSlotsRef, -1)} className="slot-scroll-button left-0" aria-label="Show previous dates">
+              &#8249;
+            </button>
+            <div ref={dateSlotsRef} className="appointment-slots-scroll flex gap-3 items-center overflow-x-auto px-9 py-1">
+              {docSlots.length &&
+                docSlots.map((item, index) => (
+                  <button
+                    type="button"
+                    onClick={() => setSlotIndex(index)}
+                    className={`min-w-20 shrink-0 rounded-xl px-3 py-4 text-center text-sm transition-all ${slotIndex === index ? "bg-primary text-white shadow-md" : "border border-gray-200 bg-white hover:border-primary hover:text-primary"}`}
+                    key={index}
+                  >
+                    <span className="block text-xs font-medium">{item[0] && daysOfWeek[item[0].datetime.getDay()]}</span>
+                    <span className="mt-1 block text-lg">{item[0] && item[0].datetime.getDate()}</span>
+                  </button>
+                ))}
+            </div>
+            <button type="button" onClick={() => scrollSlots(dateSlotsRef, 1)} className="slot-scroll-button right-0" aria-label="Show next dates">
+              &#8250;
+            </button>
           </div>
-          <div className="flex items-center gap-3 w-full overflow-x-scroll mt-4">
-            {docSlots.length &&
-              docSlots[slotIndex].map((item, index) => (
-                <p
-                  onClick={() => setSlotTime(item.time)}
-                  className={`text-sm font-light flex-shrink-0 px-5 py-2 rounded-full cursor-pointer ${item.time === slotTime ? "bg-primary text-white" : "text-gray-400 border border-gray-300"}`}
-                  key={index}
-                >
-                  {item.time.toLowerCase()}
-                </p>
-              ))}
+          <div className="relative mt-5">
+            <button type="button" onClick={() => scrollSlots(timeSlotsRef, -1)} className="slot-scroll-button left-0" aria-label="Show earlier times">
+              &#8249;
+            </button>
+            <div ref={timeSlotsRef} className="appointment-slots-scroll flex items-center gap-2 overflow-x-auto px-9 py-1">
+              {docSlots.length &&
+                docSlots[slotIndex].map((item, index) => (
+                  <button
+                    type="button"
+                    onClick={() => setSlotTime(item.time)}
+                    className={`shrink-0 rounded-full px-5 py-2 text-sm transition-all ${item.time === slotTime ? "bg-primary text-white shadow-md" : "border border-gray-300 bg-white text-gray-500 hover:border-primary hover:text-primary"}`}
+                    key={index}
+                  >
+                    {item.time.toLowerCase()}
+                  </button>
+                ))}
+            </div>
+            <button type="button" onClick={() => scrollSlots(timeSlotsRef, 1)} className="slot-scroll-button right-0" aria-label="Show later times">
+              &#8250;
+            </button>
           </div>
           <button
             onClick={bookAppointment}

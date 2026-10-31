@@ -4,6 +4,7 @@ import { AppContext } from "../context/AppContext";
 import { assets } from "../assets/images/assets";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { getFriendlyApiError } from "../utils/apiError";
 
 const Profile = () => {
   const { userData, setUserData, token, backendUrl, loadUserProfileData } =
@@ -40,9 +41,7 @@ const Profile = () => {
     error.response?.data || error.message
   );
 
-  toast.error(
-    error.response?.data?.message || error.message
-  );
+  toast.error(getFriendlyApiError(error, "Unable to update your profile. Please try again."));
 }
   };
 

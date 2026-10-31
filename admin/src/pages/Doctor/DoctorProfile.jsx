@@ -26,6 +26,15 @@ const DoctorProfile = () => {
 
   if (!form) return <div className="p-8 text-slate-500">Loading profile...</div>;
   const update = (field, value) => setForm((current) => ({ ...current, [field]: value }));
+  const specialityOptions = [
+    "General physician",
+    "Gynecologist",
+    "Dermatologist",
+    "Pediatricians",
+    "Neurologist",
+    "Gastroenterologist",
+    "Cardiologist",
+  ];
 
   const submit = async (event) => {
     event.preventDefault();
@@ -56,7 +65,6 @@ const DoctorProfile = () => {
             {[
               ["name", "Full name"],
               ["degree", "Degree"],
-              ["speciality", "Speciality"],
               ["experience", "Experience"],
               ["fees", "Consultation fee"],
             ].map(([field, label]) => (
@@ -72,6 +80,28 @@ const DoctorProfile = () => {
               </label>
             ))}
           </div>
+
+          <label className="mt-5 block text-sm font-medium text-slate-600">
+            Speciality
+            <select
+              required
+              value={specialityOptions.includes(form.speciality) ? form.speciality : "Other"}
+              onChange={(event) => update("speciality", event.target.value === "Other" ? "" : event.target.value)}
+              className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 outline-none focus:border-emerald-500"
+            >
+              {specialityOptions.map((speciality) => <option key={speciality} value={speciality}>{speciality}</option>)}
+              <option value="Other">Add speciality</option>
+            </select>
+            {!specialityOptions.includes(form.speciality) && (
+              <input
+                required
+                value={form.speciality || ""}
+                onChange={(event) => update("speciality", event.target.value)}
+                placeholder="Enter speciality"
+                className="mt-2 w-full rounded-lg border border-slate-200 px-3 py-2.5 outline-none focus:border-emerald-500"
+              />
+            )}
+          </label>
 
           <label className="mt-5 block text-sm font-medium text-slate-600">
             About

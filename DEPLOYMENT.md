@@ -44,6 +44,24 @@ Before deploying:
 
 Do not upload `.env` files or commit passwords, JWT secrets, MongoDB credentials, or Cloudinary secrets.
 
+### Keep the backend running locally
+
+Use the development command from the `backend` directory:
+
+```powershell
+npm run dev
+```
+
+Nodemon watches the backend source files and automatically restarts the server after code changes or a recoverable crash. Keep this terminal open. Closing the terminal or pressing `Ctrl+C` intentionally stops the server.
+
+For a long-running production process, use the hosting platform's Node start command:
+
+```text
+npm start
+```
+
+Free Render services may sleep after inactivity; this cannot be disabled on the free tier. Use a paid always-on instance or another always-on host if the API must never sleep.
+
 ## 2. Create a MongoDB Atlas database
 
 1. Open [MongoDB Atlas](https://www.mongodb.com/atlas) and create an account.
